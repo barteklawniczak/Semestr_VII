@@ -1,0 +1,5 @@
+Projekt inżynierski
+Temat pracy - aplikacja webowa do wizualizacji statystyk piłkarskich
+
+Do korzystania z aplikacji potrzebne są narzędzia firmy Elastic: Elasticsearch, Logstash, Kibana (ELK)
+plik football.conf jest to plik konfiguracyjny logstasha, podawany jako parametr przy jego uruchamianiu

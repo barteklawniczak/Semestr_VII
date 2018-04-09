@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tag == "error" %}
+                <div class="alert alert-danger animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% else %}
+                <div class="alert alert-success animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="row" style="background: none;">
+        <div class="col-md-4 col-md-offset-4 animated slideInDown">
+            <div class="panel panel-default" style="padding: 15px;">
+                <h2>Edit user</h2>
+                <div class="panel-body">
+                     <form action="{% url 'edit-user' user_form.id.value %}" method="post" class="form-horizontal">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next }}" />
+                        <input type="hidden" name="id" value="{{ user_form.id.value }}"/>
+                        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}"/>
+                        <div class="form-group">
+                            {{ user_form.first_name.label_tag }}
+                            {{ user_form.first_name|add_class:"form-control" }}
+                        </div>
+                         <div class="form-group">
+                            {{ user_form.last_name.label_tag }}
+                            {{ user_form.last_name|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group">
+                            {{ user_form.email.label_tag }}
+                            {{ user_form.email|add_class:"form-control" }}
+                        </div>
+                        <div class="form-actions">
+                            <input type="submit" class="btn btn-block btn-primary btn-default" value="Update"/>
+                        </div>
+                    </form>
+                </div>
+                <a href="{{ request.META.HTTP_REFERER }}">Back</a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

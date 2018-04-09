@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tag == "error" %}
+                <div class="alert alert-danger animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% else %}
+                <div class="alert alert-success animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="row round-all animated slideInDown">
+        <h2 class="page-header">Users</h2>
+        <table class="table">
+            <thead class="table-header">
+            <th>User Id</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Port</th>
+            <th class="text-center">Actions</th>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                {% for tool in tools %}
+                    {% if user.id == tool.user_id %}
+                        <tr id="user-{{ user.id }}">
+                        <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            <td><b>{{ user.id }}</b></td>
+                            <td><b>{{ user.username }}</b></td>
+                            <td>{{ user.first_name }}</td>
+                            <td>{{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <input type="text" name="port" placeholder={{ tool.port }}>
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'edit-user' user.id %}" class="btn btn-success">Edit</a>
+                                <button class="btn btn-danger" onclick="deleteUser({{ user.id }})">Delete</button>
+                                {% if tool.isDone < 1 %}
+                                    <input class="btn btn-info" type="submit" value="Allow user" name="allow"/>
+                                    <a href="#">
+                                        <span class="glyphicon glyphicon-exclamation-sign danger"></span>
+                                    </a>
+                                {% else %}
+                                    <input class="btn btn-info" type="submit" value="Decline user" name="decline"/>
+                                {% endif %}
+                            </td>
+                            <input type="hidden" name="user_id" value="{{ user.id }}" />
+                            <input type="hidden" name="tool_id" value="{{ tool.id }}" />
+                        </form>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock content %}

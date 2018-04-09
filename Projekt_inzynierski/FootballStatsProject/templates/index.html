@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tag == "error" %}
+                <div class="alert alert-danger animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% else %}
+                <div class="alert alert-success animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="row round-all animated slideInDown">
+        <div class="jumbotron bg-white">
+            <h1> FootballStats </h1>
+            <p>
+                Give us a file and we'll generate interesting statistics for you
+            </p>
+            {% if user.is_anonymous %}
+                <p>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+                    <a href="{% url 'login' %}" class="btn btn-primary">Log in</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

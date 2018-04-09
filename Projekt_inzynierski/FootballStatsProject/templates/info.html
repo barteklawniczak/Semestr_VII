@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tag == "error" %}
+                <div class="alert alert-danger animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% else %}
+                <div class="alert alert-success animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="row round-all animated slideInDown">
+        <div class="jumbotron bg-white">
+            <h2 class="divider-down-40"> Informations about application </h2>
+            <div class="panel panel-default">
+                <div class="panel-heading">Main information</div>
+                <div class="panel-body">
+                    Application is based on three tools: Elasticsearch, Logstash and Kibana. Combined, they can be very powerful
+                    in processing files and preparing visualisations.
+                    <br><br>
+                    Our system was based on data available on <a href="http://www.football-data.co.uk/">this site</a>.<br>
+                    We are prepared to parse every csv file but <a href="http://www.football-data.co.uk/mmz4281/1617/E0.csv">here</a>
+                    you have csv file on which main kibana dashboard is based.<br>
+                    Columns description and more informations about file is available in
+                    <a href="http://www.football-data.co.uk/notes.txt">this file</a>.
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">What can you do?</div>
+                <div class="panel-body">
+                    Prepare csv file with your statistics and upload it into application to get your charts done. If predefined dashboard isn't
+                    enough for you, you can make visualisations by your own on kibana site. If you find your work interesing, share it with others!
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

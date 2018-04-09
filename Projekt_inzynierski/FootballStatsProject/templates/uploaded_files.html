@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tag == "error" %}
+                <div class="alert alert-danger animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% else %}
+                <div class="alert alert-success animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="row round-all animated slideInDown">
+        <h2 class="page-header">Your uploaded files</h2>
+        <p>
+            <!-- Button trigger modal -->
+            {% if tool.isDone < 1 %}
+                <div class="panel panel-danger">
+                    <div class="panel-heading text-center">To unlock buttons you need an admin permission, please wait</div>
+                </div>
+                <button type="button" class="btn btn-block btn-lg btn-primary"
+                    data-toggle="modal" data-target="#task" disabled>Upload new file</button>
+            {% else %}
+                <button type="button" class="btn btn-block btn-lg btn-primary"
+                    data-toggle="modal" data-target="#task">Upload new file</button>
+                <a onclick="gokibana({{ tool.port }})" class="btn btn-block btn-lg btn-info">Go To Kibana</a>
+            {% endif %}
+        </p>
+        <table class="table">
+            <thead class="table-header">
+            <th class="text-center">Title</th>
+            <th class="text-center">Upload Date</th>
+            <th class="text-center">Elastic Index</th>
+            <th class="text-center">Actions</th>
+            </thead>
+            <tbody>
+            {% for file in files %}
+                <tr>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <td class="text-center">{{ file.title }}</td>
+                        <td class="text-center">{{ file.uploaded_at }}</td>
+                        <td class="text-center">{{ file.retrieve_index }}</td>
+                        <td class="text-center">
+                            {% if tool.isDone < 1 %}
+                                <input type ="submit" class="btn btn-success" name="visualizations" value="Create Visualisations" disabled/>
+                            {% else %}
+                                {% if file.visualisations < 1 %}
+                                    <input type ="submit" class="btn btn-success" name="visualizations" value="Create Visualisations" />
+                                {% else %}
+                                    <input type ="submit" class="btn btn-success" name="visualizations" value="Create Visualisations" disabled />
+                                {% endif %}
+                            {% endif %}
+                            <input type="submit" class="btn btn-danger" name="delete" value="Delete">
+                        </td>
+                        <input type="hidden" name="index_name" value="{{ file.retrieve_index}}" />
+                        <input type="hidden" name="file_with_ext" value="{{ file.title}}" />
+                        <input type="hidden" name="index_id" value="{{ file.id}}" />
+                    </form>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+    function gokibana(port) {
+       window.location.port = port;
+    }
+    </script>
+
+
+    <!-- Modal New task-->
+    <div class="modal fade" id="task" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title" id="exampleModalLabel">Browse for your prepared csv file</h3>
+                </div>
+                <div class="modal-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" name="uploaded_path" />
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Upload" name="upload" />
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

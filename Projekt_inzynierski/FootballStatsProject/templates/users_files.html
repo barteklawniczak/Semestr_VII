@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tag == "error" %}
+                <div class="alert alert-danger animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% else %}
+                <div class="alert alert-success animated zoomIn">
+                    <p>{{ message }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="row round-all animated slideInDown">
+        <h2 class="page-header">All files in system</h2>
+        <table class="table">
+            <thead class="table-header">
+            <th class="text-center">User</th>
+            <th class="text-center">File Name</th>
+            <th class="text-center">Upload Date</th>
+            <th class="text-center">Elastic Index</th>
+            <th class="text-center">Actions</th>
+            </thead>
+            <tbody>
+            {% for file in files %}
+                <tr>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <td class="text-center">{{ file.user_id }}</td>
+                        <td class="text-center">{{ file.title }}</td>
+                        <td class="text-center">{{ file.uploaded_at }}</td>
+                        <td class="text-center">{{ file.retrieve_index }}</td>
+                        <td class="text-center">
+                        <input type ="submit" class="btn btn-success" name="visualizations" value="Create Visualisations"/>
+                        <button class="btn btn-warning">Delete</button>
+                        </td>
+                        <input type="hidden" name="index_name" value="{{ file.retrieve_index}}" />
+                        <input type="hidden" name="index_id" value="{{ file.id}}" />
+                    </form>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
